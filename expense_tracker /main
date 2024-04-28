@@ -1,1 +1,130 @@
+import tkinter as tk
+import os
+
+class file_ops:
+
+    def __init__ (self, filename):
+        self.filename = filename
+    #functions for adding expense to text file
+    def write_to_file(self, entry_name, entry_amount):
+        with open(self.filename, 'a', encoding = 'utf-8') as file:
+            file.write(entry_name + '\n')
+            file.write(entry_amount + '\n')
+
+    def save_expense(self, entry_name, entry_amount):
+        self.write_to_file(entry_name, entry_amount)
+
+    def read_expense(self):
+        with open(self.filename, 'r', encoding = 'utf-8') as file:
+            read_expense = file.readlines()
+            return read_expense
+        
+    def view_expense(self):
+        read_expense = self.read_expense()
+        is_name = True
+        expense_str = ""
+        for line in read_expense:
+            expense_str += line
+            if not is_name:
+                expense_str += "\n"
+            is_name = not is_name
+        return expense_str
+
+
+            
+
+    
+def show_success_label():
+    success_label.config(text = "Expense added!")
+
+def load_frame2():
+    frame1.pack_forget() 
+    frame2.pack()
+    print('loaded frame 2')
+
+
+def load_frame3():
+    frame1.pack_forget()
+    frame3.pack()
+    expenses = file_handler.view_expense()
+
+    expenses_label = tk.Label(frame3, text = expenses, bg = bg_color, fg = "white", font = ("TKMenuFont", 12))
+    expenses_label.pack(pady = 20)
+
+def load_frame4():
+    frame1.pack_forget()
+    frame4.pack()
+    
+
+
+bg_color = "#000080"
+light_green_fg = "#90EE90"
+#initialize app
+root = tk.Tk()
+root.title("Expense Tracker")
+root.eval("tk::PlaceWindow . center")
+
+#first page
+frame1 = tk.Frame(root, width = 500, height = 600, bg = bg_color)
+frame1.pack_propagate(False)
+
+#This is the heading for the main menu
+tk.Label(frame1, text = "Welcome to the expense tracker", bg = bg_color, fg = "white", font =("TKMenuFont", 14)).pack(side=tk.TOP, pady=30)
+
+#These are the buttons for the main menu
+tk.Button(frame1, text = "Add Expense", font = ("TKHeadingFont", 10), bg = "white", fg = "black", cursor = "hand2", activebackground = "#badee2", command=lambda: (load_frame2())).pack(side=tk.TOP, pady=20)
+tk.Button(frame1, text = "View Expenses", font = ("TKHeadingFont", 10), bg = "white", fg = "black", cursor = "hand2", activebackground = "#badee2", command = lambda: load_frame3()).pack(side=tk.TOP, pady=20)
+tk.Button(frame1, text = "Setup", font = ("TKHeadingFont", 10), bg = "white", fg = "black", cursor = "hand2", activebackground = "#badee2", command = lambda: load_frame4()).pack(side=tk.TOP, pady=20)
+
+#Add expense page (frame2)
+frame2 = tk.Frame(root, width = 500, height = 600, bg = bg_color)
+frame2.pack_propagate(False)
+
+#This is the heading of the page
+tk.Label(frame2, text = "Add Expense", bg = bg_color, fg = "white", font =("TKMenuFont", 14)).pack(side=tk.TOP, pady=30)
+
+#This is the label on top of the expense name entry field
+tk.Label(frame2, text = "Enter the name of the expense below:", bg = bg_color, fg = "white").pack(pady = 10)
+
+#The variable that helps get the users input for the expense name
+#inside the variable is the text box that the user inputs the expense name into
+entry_name = tk.Entry(frame2, width = 30)
+
+entry_name.pack(pady = 10)
+
+# This is the label on top of the expense amount entry field
+tk.Label(frame2, text = "Enter the amount of the expense below:", bg = bg_color, fg = "white").pack(pady = 10)
+entry_amount = tk.Entry(frame2, width = 30)
+entry_amount.pack(pady = 10)
+
+success_label = tk.Label(frame2, text = "", bg = bg_color, fg = light_green_fg
+)
+success_label.pack()
+#Creates expense.txt file in the same folder as the python script
+current_dir = os.path.dirname(os.path.abspath(__file__))
+file_path = os.path.join(current_dir, 'expense.txt')
+file_handler = file_ops(file_path)
+
+#This is the submit button with commands to get the expense name and expense amount from the text field
+submit = tk.Button(frame2, text = "Submit", font = ("TKHeadingFont"),bg = "white", fg = "black", cursor = "hand2", command = lambda:
+ [file_handler.save_expense(entry_name.get(), entry_amount.get()), show_success_label()])
+submit.pack(pady = 10)
+
+#frame 3
+frame3 = tk.Frame(root, width = 500, height = 600, bg = bg_color)
+frame3.pack_propagate(False)
+
+tk.Label(frame3, text = "Expenses", bg = bg_color, fg = "white", font =("TKMenuFont", 14)).pack(side=tk.TOP, pady=30)
+
+#frame 4
+frame4 = tk.Frame(root, width = 500, height = 600, bg = bg_color)
+frame4.pack_propagate(False)
+
+tk.Label(frame4, text = "Setup expense tracker", bg = bg_color, fg = "white", font =("TKMenuFont", 14)).pack(side=tk.TOP, pady=30)
+tk.Label(frame4, text = "Enter your monthly income below:", bg = bg_color, fg = "white").pack(pady = 10)
+user_income = tk.Entry(frame4, width = 30)
+user_income.pack(pady = 10)
+#run app
+frame1.pack()
+root.mainloop()
 
