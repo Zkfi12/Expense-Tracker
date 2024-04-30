@@ -1,13 +1,17 @@
 import tkinter as tk
 import os
 
+
+
 class file_ops:
 
-    def __init__ (self, filename):
-        self.filename = filename
-    #functions for adding expense to text file
+    def __init__ (self, expense_filename, income_filename):
+        self.expense_filename = expense_filename
+        self.income_filename = income_filename
+
+    #functions for adding expense to expense.txt file
     def write_to_file(self, entry_name, entry_amount):
-        with open(self.filename, 'a', encoding = 'utf-8') as file:
+        with open(self.expense_filename, 'a', encoding = 'utf-8') as file:
             file.write(entry_name + '\n')
             file.write(entry_amount + '\n')
 
@@ -15,7 +19,7 @@ class file_ops:
         self.write_to_file(entry_name, entry_amount)
 
     def read_expense(self):
-        with open(self.filename, 'r', encoding = 'utf-8') as file:
+        with open(self.expense_filename, 'r', encoding = 'utf-8') as file:
             read_expense = file.readlines()
             return read_expense
         
@@ -29,7 +33,24 @@ class file_ops:
                 expense_str += "\n"
             is_name = not is_name
         return expense_str
+    
+    #Functions for adding user income to income.txt file
+    def write_user_income(self, income_amount):
 
+        #helps fix an error were you cant add expenses or income to text files
+        if os.path.getsize(self.income_filename) == 0:
+            mode = 'w'  
+        else:
+            mode = 'a'
+
+        #Writes the income to income.txt file    
+        with open(self.income_filename, 'a', encoding = 'utf-8') as file:
+            file.write(income_amount)
+
+    
+
+    def save_user_income(self, income_amount):
+        self.write_user_income(income_amount)
 
             
 def back_frame2():
@@ -62,7 +83,7 @@ def load_frame3():
     for widget in frame3.winfo_children():
         widget.destroy()
 
-    expenses = file_handler.view_expense()
+    expenses = expense_file_handler.view_expense()
     expenses_label = tk.Label(frame3, text = expenses, bg = bg_color, fg = "white", font = ("TKMenuFont", 12))
     expenses_label.pack(pady = 20)
 
@@ -119,14 +140,25 @@ entry_amount.pack(pady = 10)
 
 success_label = tk.Label(frame2, text = "", bg = bg_color, fg = light_green_fg)
 success_label.pack()
+
+
+
 #Creates expense.txt file in the same folder as the python script
 current_dir = os.path.dirname(os.path.abspath(__file__))
-file_path = os.path.join(current_dir, 'expense.txt')
-file_handler = file_ops(file_path)
+expense_file_path = os.path.join(current_dir, 'expense.txt')
+income_file_path = os.path.join(current_dir, 'income.txt')
+expense_file_handler = file_ops(expense_filename = expense_file_path, income_filename = income_file_path)
+income_file_handler = file_ops(income_filename=income_file_path, expense_filename = expense_file_path)
+
+if not os.path.exists(income_file_path):
+    # Create the file if it doesn't exist
+    with open(income_file_path, 'w', encoding='utf-8'):
+        pass  # This will create an empty file
+
 
 #This is the submit button with commands to get the expense name and expense amount from the text field
 submit = tk.Button(frame2, text = "Submit", font = ("TKHeadingFont"),bg = "white", fg = "black", cursor = "hand2", command = lambda:
- [file_handler.save_expense(entry_name.get(), entry_amount.get()), show_success_label()])
+ [expense_file_handler.save_expense(entry_name.get(), entry_amount.get()), show_success_label()])
 submit.place(relx=0.5, rely=0.5, anchor=tk.CENTER, x=58, y=10)
 
 back = tk.Button(frame2, text = "  Back  ", font = ("TKHeadingFont"),bg = "white", fg = "black", cursor = "hand2", command = back_frame2)
@@ -145,12 +177,16 @@ frame4.pack_propagate(False)
 
 tk.Label(frame4, text = "Setup expense tracker", bg = bg_color, fg = "white", font =("TKMenuFont", 14)).pack(side=tk.TOP, pady=30)
 tk.Label(frame4, text = "Enter your monthly income below:", bg = bg_color, fg = "white").pack(pady = 10)
-user_income = tk.Entry(frame4, width = 30)
-user_income.pack(pady = 10)
-accept4 = tk.Button(frame4, text = "Accept", font = ("TKHeadingFont"),bg = "white", fg = "black", cursor = "hand2", command = back_frame4)
-accept4.pack(pady=10)
+income_amount = tk.Entry(frame4, width = 30)
+income_amount.pack(pady = 10)
+accept4 = tk.Button(frame4, text = "Accept", font = ("TKHeadingFont"),bg = "white", fg = "black", cursor = "hand2", command = lambda: income_file_handler.save_user_income(income_amount.get()))
+back4 = tk.Button(frame4, text = "  Back  ", font = ("TKHeadingFont"),bg = "white", fg = "black", cursor = "hand2", command = back_frame4)
+accept4.place(relx=0.5, rely=0.5, anchor=tk.CENTER, x=58, y=-100)
+back4.place(relx=0.5, rely=0.5, anchor = tk.CENTER, x = -58, y = -100)
 #run app
 frame1.pack()
+root.mainloop()
+
 root.mainloop()
 
 
