@@ -1,8 +1,6 @@
 import tkinter as tk
 import os
 
-
-
 class file_ops:
 
     def __init__ (self, expense_filename, income_filename):
@@ -47,12 +45,12 @@ class file_ops:
         with open(self.income_filename, 'a', encoding = 'utf-8') as file:
             file.write(income_amount)
 
-    
 
     def save_user_income(self, income_amount):
         self.write_user_income(income_amount)
 
             
+
 def back_frame2():
     frame2.pack_forget()
     frame1.pack()
@@ -116,10 +114,8 @@ tk.Button(frame1, text = "View Expenses", font = ("TKHeadingFont", 10), bg = "wh
 tk.Button(frame1, text = "Setup", font = ("TKHeadingFont", 10), bg = "white", fg = "black", cursor = "hand2", activebackground = "#badee2", command = lambda: load_frame4()).pack(side=tk.TOP, pady=20)
 
 #Add expense page (frame2)
-
 frame2 = tk.Frame(root, width = 500, height = 600, bg = bg_color)
 frame2.pack_propagate(False)
-
 
 #This is the heading of the page
 tk.Label(frame2, text = "Add Expense", bg = bg_color, fg = "white", font =("TKMenuFont", 14)).pack(side=tk.TOP, pady=30)
@@ -130,7 +126,6 @@ tk.Label(frame2, text = "Enter the name of the expense below:", bg = bg_color, f
 #The variable that helps get the users input for the expense name
 #inside the variable is the text box that the user inputs the expense name into
 entry_name = tk.Entry(frame2, width = 30)
-
 entry_name.pack(pady = 10)
 
 # This is the label on top of the expense amount entry field
@@ -140,7 +135,6 @@ entry_amount.pack(pady = 10)
 
 success_label = tk.Label(frame2, text = "", bg = bg_color, fg = light_green_fg)
 success_label.pack()
-
 
 
 #Creates expense.txt file in the same folder as the python script
@@ -154,7 +148,6 @@ if not os.path.exists(income_file_path):
     # Create the file if it doesn't exist
     with open(income_file_path, 'w', encoding='utf-8'):
         pass  # This will create an empty file
-
 
 #This is the submit button with commands to get the expense name and expense amount from the text field
 submit = tk.Button(frame2, text = "Submit", font = ("TKHeadingFont"),bg = "white", fg = "black", cursor = "hand2", command = lambda:
@@ -186,7 +179,3 @@ back4.place(relx=0.5, rely=0.5, anchor = tk.CENTER, x = -58, y = -100)
 #run app
 frame1.pack()
 root.mainloop()
-
-root.mainloop()
-
-
