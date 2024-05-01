@@ -50,7 +50,6 @@ class file_ops:
         self.write_user_income(income_amount)
 
             
-
 def back_frame2():
     frame2.pack_forget()
     frame1.pack()
@@ -67,7 +66,6 @@ def back_frame4():
 def show_success_label():
     success_label.config(text = "Expense added!")
 
-    
 
 def load_frame2():
     frame1.pack_forget() 
@@ -82,10 +80,10 @@ def load_frame3():
         widget.destroy()
 
     expenses = expense_file_handler.view_expense()
-    expenses_label = tk.Label(frame3, text = expenses, bg = bg_color, fg = "white", font = ("TKMenuFont", 12))
+    expenses_label = tk.Label(frame3, text = expenses, bg = bg_color, fg = box_color, font = ("TKMenuFont", 12))
     expenses_label.pack(pady = 20)
 
-    back3 = tk.Button(frame3, text = "  Back  ", font = ("TKMenuFont"), bg = "white", fg = "black", cursor = "hand2", command = back_frame3)
+    back3 = tk.Button(frame3, text = "  Back  ", font = ("TKMenuFont"), bg = box_color, fg = "black", cursor = "hand2", command = back_frame3)
     back3.pack(pady=10)
 
 def load_frame4():
@@ -93,8 +91,10 @@ def load_frame4():
     frame4.pack()
     
 
-
-bg_color = "#000080"
+bg_color = "#ADBBDA"
+main_text_color = "#3D52A0"
+heading_color = "#8697C4"
+box_color = "white"
 light_green_fg = "#90EE90"
 #initialize app
 root = tk.Tk()
@@ -106,31 +106,33 @@ frame1 = tk.Frame(root, width = 500, height = 600, bg = bg_color)
 frame1.pack_propagate(False)
 
 #This is the heading for the main menu
-tk.Label(frame1, text = "Welcome to the expense tracker", bg = bg_color, fg = "white", font =("TKMenuFont", 14)).pack(side=tk.TOP, pady=30)
+tk.Label(frame1, text = "Welcome to the expense tracker", bg = bg_color, fg = "black", font =("TKMenuFont", 20)).pack(side=tk.TOP, pady=30)
 
 #These are the buttons for the main menu
-tk.Button(frame1, text = "Add Expense", font = ("TKHeadingFont", 10), bg = "white", fg = "black", cursor = "hand2", activebackground = "#badee2", command=lambda: (load_frame2())).pack(side=tk.TOP, pady=20)
-tk.Button(frame1, text = "View Expenses", font = ("TKHeadingFont", 10), bg = "white", fg = "black", cursor = "hand2", activebackground = "#badee2", command = lambda: load_frame3()).pack(side=tk.TOP, pady=20)
-tk.Button(frame1, text = "Setup", font = ("TKHeadingFont", 10), bg = "white", fg = "black", cursor = "hand2", activebackground = "#badee2", command = lambda: load_frame4()).pack(side=tk.TOP, pady=20)
+tk.Button(frame1, width = 15, text = " Add Expense ", font = ("TKHeadingFont", 12), bg = bg_color, fg = "white", cursor = "hand2", activebackground = "#badee2", command=lambda: (load_frame2())).pack(side=tk.TOP, pady=20)
+tk.Button(frame1, width = 15, text = "View Expenses", font = ("TKHeadingFont", 12), bg = bg_color, fg = "white", cursor = "hand2", activebackground = "#badee2", command = lambda: load_frame3()).pack(side=tk.TOP, pady=20)
+tk.Button(frame1, width = 15, text = "       Setup       ", font = ("TKHeadingFont", 12), bg = bg_color, fg = "white", cursor = "hand2", activebackground = "#badee2", command = lambda: load_frame4()).pack(side=tk.TOP, pady=20)
 
 #Add expense page (frame2)
 frame2 = tk.Frame(root, width = 500, height = 600, bg = bg_color)
 frame2.pack_propagate(False)
 
+
 #This is the heading of the page
-tk.Label(frame2, text = "Add Expense", bg = bg_color, fg = "white", font =("TKMenuFont", 14)).pack(side=tk.TOP, pady=30)
+tk.Label(frame2, text = "Add Expense", bg = bg_color, fg = "black", font =("TKMenuFont", 20)).pack(side=tk.TOP, pady=30)
 
 #This is the label on top of the expense name entry field
-tk.Label(frame2, text = "Enter the name of the expense below:", bg = bg_color, fg = "white").pack(pady = 10)
+tk.Label(frame2, text = "Enter the name of the expense below:", bg = bg_color, fg = "white", font = ("TKMenuFont", 14)).pack(pady = 10)
 
 #The variable that helps get the users input for the expense name
 #inside the variable is the text box that the user inputs the expense name into
-entry_name = tk.Entry(frame2, width = 30)
+entry_name = tk.Entry(frame2, width = 30, bg = bg_color, fg = "white", font = ("TKMenuFont", 14))
+
 entry_name.pack(pady = 10)
 
 # This is the label on top of the expense amount entry field
-tk.Label(frame2, text = "Enter the amount of the expense below:", bg = bg_color, fg = "white").pack(pady = 10)
-entry_amount = tk.Entry(frame2, width = 30)
+tk.Label(frame2, text = "Enter the amount of the expense below:", bg = bg_color, fg = "white", font = ("TKMenuFont", 14)).pack(pady = 10)
+entry_amount = tk.Entry(frame2, width = 30, bg = bg_color, fg = "white", font = ("TKMenuFont", 14))
 entry_amount.pack(pady = 10)
 
 success_label = tk.Label(frame2, text = "", bg = bg_color, fg = light_green_fg)
@@ -149,33 +151,34 @@ if not os.path.exists(income_file_path):
     with open(income_file_path, 'w', encoding='utf-8'):
         pass  # This will create an empty file
 
+
 #This is the submit button with commands to get the expense name and expense amount from the text field
-submit = tk.Button(frame2, text = "Submit", font = ("TKHeadingFont"),bg = "white", fg = "black", cursor = "hand2", command = lambda:
+submit = tk.Button(frame2, text = "  Submit  ", font = ("TKHeadingFont"),bg = bg_color, fg = "white", cursor = "hand2", command = lambda:
  [expense_file_handler.save_expense(entry_name.get(), entry_amount.get()), show_success_label()])
 submit.place(relx=0.5, rely=0.5, anchor=tk.CENTER, x=58, y=10)
 
-back = tk.Button(frame2, text = "  Back  ", font = ("TKHeadingFont"),bg = "white", fg = "black", cursor = "hand2", command = back_frame2)
+back = tk.Button(frame2, text = "    Back    ", font = ("TKHeadingFont"),bg = box_color, fg = "black", cursor = "hand2", command = back_frame2)
 back.place(relx=0.5, rely=0.5, anchor = tk.CENTER, x = -58, y = 10)
 #frame 3
 frame3 = tk.Frame(root, width = 500, height = 600, bg = bg_color)
 frame3.pack_propagate(False)
 
-tk.Label(frame3, text = "Expenses", bg = bg_color, fg = "white", font =("TKMenuFont", 14)).pack(side=tk.TOP, pady=30)
-back3 = tk.Button(frame3, text = "  Back  ", font = ("TKHeadingFont"),bg = "white", fg = "black", cursor = "hand2", command = back_frame3)
+tk.Label(frame3, text = "Expenses", bg = bg_color, fg = box_color, font =("TKMenuFont", 14)).pack(side=tk.TOP, pady=30)
+back3 = tk.Button(frame3, text = "  Back  ", font = ("TKHeadingFont"),bg = box_color, fg = "black", cursor = "hand2", command = back_frame3)
 back3.pack(pady=10)
 
 #frame 4
 frame4 = tk.Frame(root, width = 500, height = 600, bg = bg_color)
 frame4.pack_propagate(False)
 
-tk.Label(frame4, text = "Setup expense tracker", bg = bg_color, fg = "white", font =("TKMenuFont", 14)).pack(side=tk.TOP, pady=30)
-tk.Label(frame4, text = "Enter your monthly income below:", bg = bg_color, fg = "white").pack(pady = 10)
-income_amount = tk.Entry(frame4, width = 30)
+tk.Label(frame4, text = "Setup expense tracker", bg = bg_color, fg = "black", font =("TKMenuFont", 20)).pack(side=tk.TOP, pady=30)
+tk.Label(frame4, text = "Enter your monthly income below:", bg = bg_color, fg = "white", font = ("TKMenuFont", 14)).pack(pady = 10)
+income_amount = tk.Entry(frame4, width = 30, bg = bg_color, fg = "white", font = ("TKMenuFont", 14))
 income_amount.pack(pady = 10)
-accept4 = tk.Button(frame4, text = "Accept", font = ("TKHeadingFont"),bg = "white", fg = "black", cursor = "hand2", command = lambda: income_file_handler.save_user_income(income_amount.get()))
-back4 = tk.Button(frame4, text = "  Back  ", font = ("TKHeadingFont"),bg = "white", fg = "black", cursor = "hand2", command = back_frame4)
-accept4.place(relx=0.5, rely=0.5, anchor=tk.CENTER, x=58, y=-100)
-back4.place(relx=0.5, rely=0.5, anchor = tk.CENTER, x = -58, y = -100)
+accept4 = tk.Button(frame4, width = 12, text = "Accept", font = ("TKHeadingFont"),bg = bg_color, fg = "white", cursor = "hand2", command = lambda: income_file_handler.save_user_income(income_amount.get()))
+back4 = tk.Button(frame4, width = 12, text = "  Back  ", font = ("TKHeadingFont"),bg = box_color, fg = "black", cursor = "hand2", command = back_frame4)
+accept4.place(relx=0.5, rely=0.5, anchor=tk.CENTER, x=68, y=-65)
+back4.place(relx=0.5, rely=0.5, anchor = tk.CENTER, x = -68, y =-65)
 #run app
 frame1.pack()
 root.mainloop()
